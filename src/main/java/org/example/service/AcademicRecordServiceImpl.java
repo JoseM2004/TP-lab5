@@ -46,11 +46,13 @@ public class AcademicRecordServiceImpl implements AcademicRecordService {
 
   @Override
   public List<Grade> listAllGrades() {
-    return null;
+
+    return this.gradeRepository.findAllGrades();
   }
 
   @Override
   public Grade addGrade(Grade newGrade) {
-    return null;
+
+    return this.gradeRepository.addGrade(newGrade);
   }
 }

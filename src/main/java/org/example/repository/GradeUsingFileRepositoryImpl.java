@@ -28,9 +28,7 @@ public class GradeUsingFileRepositoryImpl implements GradeRepository {
 
   private List<Grade> loadGrades(){
     logger.info( "Cargando los datos desde archivo" );
-    List<String> plainTextGradeList =  readFileWithGrades();
-    List<Grade> gradeList = plainTextGradeList.stream().map( this::buildGrade ).toList();
-    return gradeList;
+    return readFileWithGrades().stream().map( this::buildGrade ).toList();
   }
 
   private List<String> readFileWithGrades(){
@@ -40,7 +38,7 @@ public class GradeUsingFileRepositoryImpl implements GradeRepository {
     //Este ruta es diferente al momento de empaquetar el proyecto
 
     Path path = Paths.get( "./src/main/resources/notas.txt");
-    try (Stream<String> stream = Files.lines( path)) {
+    try (Stream<String> stream = Files.lines(path)) {
       return stream.toList();
     } catch (IOException x) {
       logger.error("IOException: {0}", x);
@@ -54,9 +52,7 @@ public class GradeUsingFileRepositoryImpl implements GradeRepository {
      */
     String[] questionArray = plainTextGrade.split(",");//En el archivo las notas vienen separadas por comas por ejemplo: UNIDAD 1,4.5D,2023-08-01
 
-    Grade grade = new Grade( questionArray[0], Double.valueOf(questionArray[1]), LocalDate.parse( questionArray[2], DateTimeFormatter.ISO_DATE));
-
-    return grade;
+    return new Grade( questionArray[0], Double.valueOf(questionArray[1]), LocalDate.parse( questionArray[2], DateTimeFormatter.ISO_DATE));
   }
 
 
@@ -75,12 +71,12 @@ public class GradeUsingFileRepositoryImpl implements GradeRepository {
     this.gradeList.add( newGrade );
 
     return this.gradeList.stream()
-            .filter( isTheGradeOfTheProject( newGrade ) )//Busca la nota en la lista que corresponda al proyecto de la nota recien creada
+            .filter( searchTheGradeOfTheProject( newGrade ) )//Busca la nota en la lista que corresponda al proyecto de la nota recien creada
             .findAny()
             .orElse( null );//Si no la encuentra devuelve nulo
   }
 
-  private Predicate<Grade> isTheGradeOfTheProject(Grade newGrade) {
+  private Predicate<Grade> searchTheGradeOfTheProject(Grade newGrade) {
     return p -> p.project().equals( newGrade.project() );
   }
 

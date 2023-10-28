@@ -32,9 +32,7 @@ public class GradeInMemoryRepositoryImpl implements GradeRepository {
   }
 
   @Override
-  public List<Grade> findAllGrades() {
-    return gradeList;
-  }
+  public List<Grade> findAllGrades() {return gradeList;}
 
   @Override
   public Optional<Grade> getGrade(String unidad) {
